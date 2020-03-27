@@ -16,5 +16,5 @@ What are emergency department wait times?
 Who needs extra staff or volunteers? 
 Which hospitals need supplies like masks or gloves?
 
-This information would be input into some database and reflect real time updates in the dashboard.
+This information would be input into some database and be reflected in real time updates in the dashboard.
 
