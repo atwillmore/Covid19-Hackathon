@@ -6,6 +6,7 @@ Winner Winner
 Right now the idea is:
 
 A dashboard (RShiny?) displaying a map of the US with markers for hospitals
+
 Each hospital could be clicked and display information such as:
 
 Which hospitals have negative pressure rooms available? 
