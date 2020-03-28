@@ -6,9 +6,9 @@ output$myMap <- renderLeaflet({
   Hospitals$status <- rep(c("red", "orange", "green"), len = 59)
   
   icons <- awesomeIcons(
-    icon = 'ios-close',
+    icon = 'ambulance',
     iconColor = 'black',
-    library = 'ion',
+    library = 'fa',
     markerColor = Hospitals$status
   )
   
