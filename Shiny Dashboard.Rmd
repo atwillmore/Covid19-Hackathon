@@ -13,6 +13,7 @@ output: html_document
 library(shinydashboard)
 library(tidyverse)
 library(leaflet)
+library(readxl)
 
 knitr::opts_chunk$set(
   echo = FALSE, warning = FALSE

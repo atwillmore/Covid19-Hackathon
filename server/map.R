@@ -1,11 +1,8 @@
-points <- eventReactive(input$recalc, {
-  cbind(rnorm(40) * 2 + 13, rnorm(40) + 48)
-}, ignoreNULL = FALSE)
-
 output$myMap <- renderLeaflet({
-  leaflet() %>%
-    addProviderTiles(providers$Stamen.TonerLite,
-                     options = providerTileOptions(noWrap = TRUE)
-    ) %>%
-    addMarkers(data = points())
+  Hospital_List <- read_excel("Hospital List.xlsx")
+  Hospitals <- Hospital_List %>% separate(`Place Name`, into = c("Hospital", "City", "State", "Country"), sep = ",")
+  
+  Hospitals %>% leaflet() %>%
+    addTiles() %>%
+    addMarkers(popup = as.list(Hospitals$Hospital))
 })
