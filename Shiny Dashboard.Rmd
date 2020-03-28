@@ -26,27 +26,18 @@ knitr::opts_chunk$set(
   header <-dashboardHeader(title = "Health Systems Dash")
 
   sidebar <- dashboardSidebar(sidebarMenu(
-      menuItem("Hospital Info", tabName = "info", icon = icon("dashboard")),
+      menuItem("Hospital Info", tabName = "db", icon = icon("dashboard")),
       menuItem("Availability Map", tabName = "map", icon = icon("th"))
       )
     )
   
   body <-dashboardBody(
     tabItems(
-      # First tab content
-      tabItem(tabName = "info",
-        fluidRow(
-          box(plotOutput("plot1", height = 250)),
-
-          box(
-            title = "Controls",
-            sliderInput("slider", "Number of observations:", 1, 100, 50)
-          )
-        )
-      ),
-
-      # Second tab content
-      source(file.path("ui/map.R"), local = T)$value
+    # First tab content
+    source(file.path("ui/db.R"), local = T)$value,
+    
+    #Second tab content
+    source(file.path("ui/map.R"), local = T)$value
   )
 )
 
@@ -59,13 +50,7 @@ ui <- dashboardPage(skin = "blue",
 
 ```{r}
 server <- function(input, output) {
-  set.seed(122)
-  histdata <- rnorm(500)
 
-  output$plot1 <- renderPlot({
-    data <- histdata[seq_len(input$slider)]
-    hist(data)
-  })
   
   source(file.path("server/map.R"), local = T)$value
   
