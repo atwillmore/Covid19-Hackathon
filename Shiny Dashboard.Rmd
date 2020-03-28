@@ -1,0 +1,80 @@
+---
+runtime: shiny
+output: html_document
+---
+<style type="text/css">
+.main-container {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+```{r, include = FALSE, warning = FALSE}
+library(shinydashboard)
+library(tidyverse)
+
+knitr::opts_chunk$set(
+  echo = FALSE, warning = FALSE
+)
+
+```
+
+```{r, echo = FALSE, warning = FALSE}
+
+  header <-dashboardHeader(title = "Health Systems Dash")
+
+  sidebar <- dashboardSidebar(sidebarMenu(
+      menuItem("Hospital Info", tabName = "info", icon = icon("dashboard")),
+      menuItem("Availability Map", tabName = "map", icon = icon("th"))
+      )
+    )
+  
+  body <-dashboardBody(
+    tabItems(
+      # First tab content
+      tabItem(tabName = "info",
+        fluidRow(
+          box(plotOutput("plot1", height = 250)),
+
+          box(
+            title = "Controls",
+            sliderInput("slider", "Number of observations:", 1, 100, 50)
+          )
+        )
+      ),
+
+      # Second tab content
+      source(file.path("ui/map.R"), local = T)$value
+      #source(file.path("/Users/Sigchi/Desktop/Covid19/ui/map.R"), local = T)$value
+  )
+)
+
+ui <- dashboardPage(skin = "blue",
+                    header,
+                    sidebar,
+                    body)
+
+```
+
+```{r}
+server <- function(input, output) {
+  set.seed(122)
+  histdata <- rnorm(500)
+
+  output$plot1 <- renderPlot({
+    data <- histdata[seq_len(input$slider)]
+    hist(data)
+  })
+}
+
+```
+
+```{r}
+shinyApp(ui, server, options = list(height = 1080))
+```
+
+
+
+
+
+
