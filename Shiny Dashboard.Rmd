@@ -27,8 +27,8 @@ knitr::opts_chunk$set(
   header <-dashboardHeader(title = "Health Systems Dash")
 
   sidebar <- dashboardSidebar(sidebarMenu(
-      menuItem("Hospital Info", tabName = "db", icon = icon("dashboard")),
-      menuItem("Availability Map", tabName = "map", icon = icon("th"))
+      menuItem("Hospital Info", tabName = "db", icon = icon("ambulance")),
+      menuItem("Availability Map", tabName = "map", icon = icon("map-marked-alt"))
       )
     )
   
@@ -54,6 +54,8 @@ server <- function(input, output) {
 
   
   source(file.path("server/map.R"), local = T)$value
+  
+  source(file.path("server/db.R"), local = T)$value
   
 }
 

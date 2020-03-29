@@ -1,6 +1,7 @@
 ###Load in, filter data###
 hospital_data <- reactive({
   
+  #####LOAD IN DATABASE HERE INSTEAD OF READ EXCEL, ASSIGN IT TO Hospital_List#####
   #Data from https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?geometry=94.054%2C-16.829%2C-124.970%2C72.120&selectedAttribute=BEDS
   Hospital_List <- read_excel("Hospitals.xlsx")
   
