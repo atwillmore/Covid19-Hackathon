@@ -5,10 +5,22 @@ hospital_data <- reactive({
   Hospital_List <- read_excel("Hospitals.xlsx")
   
   #Filter for open and > 200 BEDS
-  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", BEDS > 200)
+  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", BEDS > 200, TYPE == "CRITICAL ACCESS" |
+                                              TYPE == "GENERAL ACUTE CARE" |
+                                              TYPE == "CHILDREN")
   
   #Dummy assignment of status
-  Hospital_List$status <- rep(c("red", "orange", "green"), len = 1639)
+  Hospital_List$status <- rep(c("red", "orange", "green"), len = 1533)
+  
+  #Assign icon for children's hospital vs general
+  for(row in 1:nrow(Hospital_List)){
+    if(Hospital_List[row,"TYPE"] == "CHILDREN"){
+      Hospital_List[row,"icon"] = "child"
+    }
+    else{
+      Hospital_List[row,"icon"] = "h-square"
+    }
+  }
   
   #Return dataset to be used by leaflet and dt
   Hospital_List
@@ -21,7 +33,7 @@ output$myMap <- renderLeaflet({
   
   #make icons
   icons <- awesomeIcons(
-    icon = 'ambulance',
+    icon = Hospitals$icon,
     iconColor = 'black',
     library = 'fa',
     markerColor = Hospitals$status
