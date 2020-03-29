@@ -31,6 +31,7 @@ x <- eventReactive(input$submit, {
       Hospitals[row, "Negative Rooms"] = input$Neg_room
       Hospitals[row, "Shortages"] = input$Shortages
       Hospitals[row, "status"] = input$Status
+      Hospitals[row, "date"] = input$date
       break()
     }
   }
