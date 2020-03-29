@@ -1,3 +1,7 @@
 tabItem(tabName = "map",
-        leafletOutput("myMap")
+        leafletOutput("myMap"),
+        
+        tags$hr(),
+        
+        dataTableOutput("table")
 )

@@ -14,6 +14,7 @@ library(shinydashboard)
 library(tidyverse)
 library(leaflet)
 library(readxl)
+library(DT)
 
 knitr::opts_chunk$set(
   echo = FALSE, warning = FALSE
