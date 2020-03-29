@@ -5,12 +5,38 @@ hospital_data <- reactive({
   Hospital_List <- read_excel("Hospitals.xlsx")
   
   #Filter for open and > 200 BEDS
-  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", BEDS > 200, TYPE == "CRITICAL ACCESS" |
+  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", BEDS > 150, TYPE == "CRITICAL ACCESS" |
                                               TYPE == "GENERAL ACUTE CARE" |
                                               TYPE == "CHILDREN")
   
   #Dummy assignment of status
-  Hospital_List$status <- rep(c("red", "orange", "green"), len = 1533)
+  Hospital_List$status <- rep(c("max capacity", "nearing capacity", "open resources"), len = 1933)
+  
+  #Assign colors for markers
+  for(row in 1:nrow(Hospital_List)){
+    if(Hospital_List[row, "status"] == "max capacity"){
+      Hospital_List[row, "marker"] = "red"
+    }
+    else if (Hospital_List[row, "status"] == "nearing capacity"){
+      Hospital_List[row, "marker"] = "orange"
+    }
+    else{
+      Hospital_List[row,"marker"] = "green"
+    }
+  }
+  
+  #Check for input of filters on available capacity
+  if(1 %in% input$capacity == FALSE){
+    Hospital_List <- Hospital_List %>% filter(status != "max capacity")
+  }
+  
+  if(2 %in% input$capacity == FALSE){
+    Hospital_List <- Hospital_List %>% filter(status != "nearing capacity")
+  }
+  
+  if(3 %in% input$capacity == FALSE){
+    Hospital_List <- Hospital_List %>% filter(status != "open resources")
+  }
   
   #Assign icon for children's hospital vs general
   for(row in 1:nrow(Hospital_List)){
@@ -36,7 +62,7 @@ output$myMap <- renderLeaflet({
     icon = Hospitals$icon,
     iconColor = 'black',
     library = 'fa',
-    markerColor = Hospitals$status
+    markerColor = Hospitals$marker
   )
   
   #create leaflet map
@@ -49,7 +75,7 @@ output$myMap <- renderLeaflet({
 output$table <- renderDataTable({
   Hospitals <- hospital_data()
   #select relevant columns to display
-  Hospitals <- Hospitals %>% select(NAME:ZIP,BEDS)
+  Hospitals <- Hospitals %>% select(NAME:ZIP,BEDS, status)
   
   datatable(Hospitals,
             options = list(lengthMenu = c(25,50,100,200)),
