@@ -68,7 +68,8 @@ output$myMap <- renderLeaflet({
   #create leaflet map
   Hospitals %>% leaflet() %>%
     addTiles() %>%
-    addAwesomeMarkers(lat = ~LATITUDE, lng = ~LONGITUDE,  label = ~NAME, popup = ~status, icon = icons)
+    addAwesomeMarkers(lat = ~LATITUDE, lng = ~LONGITUDE,  label = ~NAME, icon = icons, popup = paste("Status:", Hospitals$status, "<br>",
+                                                                                                     "Beds Available:", Hospitals$BEDS))
 })
 
 ###Generate output table###
