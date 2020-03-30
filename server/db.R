@@ -18,7 +18,8 @@ output$hospital <- renderPrint({
   
 })
 
-
+# y <- reactiveValues(input$submit)
+# x <- eventReactive(y, {
 x <- eventReactive(input$submit, {
   ###MAKE UPDATES TO DATABASE HERE
   
@@ -35,6 +36,23 @@ x <- eventReactive(input$submit, {
       break()
     }
   }
+  
+
+# dbSendQuery(hdb,  dbEscapeStrings(hdb, "update hospitals_19oct7 
+#                  set ventilators = input$Ventilators, 
+#                      negative_rooms = input$Neg_room,
+#                      shortages = input$Shortages,
+#                      entry_date = str_to_date(input$date, '%Y-%m-%d'),
+#                      beds = input$Beds
+#                 where id =input$ID"     ))
+  
+  dbSendQuery(hdb,  dbEscapeStrings(hdb, "update hospitals_19oct7 
+                 set ventilators = input$Ventilators, 
+                     negative_rooms = input$Neg_room,
+                where id =input$ID"     ))
+update <- dbSendQuery(hdb,  dbEscapeStrings(hdb, "select * from hosp_info_19oct7 where id = input$ID"))
+  fetch(update)
+  
   
   
 })
