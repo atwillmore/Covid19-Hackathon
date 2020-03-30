@@ -1,0 +1,10 @@
+name: covid19
+title:
+username:
+account: atwillmore
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2017975
+bundleId: 2941682
+url: https://atwillmore.shinyapps.io/covid19/
+when: 1585531052.47591

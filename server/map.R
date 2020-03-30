@@ -3,13 +3,13 @@ hospital_data <- reactive({
   
   #####LOAD IN DATABASE HERE INSTEAD OF READ EXCEL, ASSIGN IT TO Hospital_List#####
   #Data from https://hifld-geoplatform.opendata.arcgis.com/datasets/hospitals/data?geometry=94.054%2C-16.829%2C-124.970%2C72.120&selectedAttribute=BEDS
-  login <- readLines("~\\login.txt")
+  login <- readLines("login.txt")
   loginTxt <- unlist(strsplit(login, split = "\\t"))
   hdb = dbConnect(MySQL(), 
                   user=loginTxt[1], 
                   password = loginTxt[2], 
-                  dbname='hospital_db', 
-                  host='hospitaldb2.cbchdqimrdp1.us-east-2.rds.amazonaws.com')
+                  dbname="hospital_db", 
+                  host="hospitaldb2.cbchdqimrdp1.us-east-2.rds.amazonaws.com")
   hosp_info <- dbSendQuery(hdb, "select * from hospitals_19oct7")
   Hospital_List <-fetch(hosp_info, n=-1)
   
