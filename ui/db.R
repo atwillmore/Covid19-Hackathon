@@ -32,7 +32,8 @@ tabItem(tabName = "db",
                 status = "primary",
                 width = 8,
                 verbatimTextOutput("hospital"),
-                verbatimTextOutput("test"))
+                verbatimTextOutput("test"),
+                dataTableOutput("tab"))
             
                 
             )
