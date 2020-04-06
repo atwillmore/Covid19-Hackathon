@@ -14,12 +14,12 @@ hospital_data <- reactive({
   Hospital_List <-fetch(hosp_info, n=-1)
   
   #Filter for open and > 200 BEDS
-  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", BEDS > 150, TYPE == "CRITICAL ACCESS" |
+  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", 
                                               TYPE == "GENERAL ACUTE CARE" |
                                               TYPE == "CHILDREN")
   
   #Dummy assignment of status
-  Hospital_List$status <- rep(c("max capacity", "nearing capacity", "open resources"), len = 1933)
+  Hospital_List$status <- rep(c("max capacity", "nearing capacity", "open resources"), len = 4346)
   
   #Assign colors for markers
   for(row in 1:nrow(Hospital_List)){
@@ -77,15 +77,17 @@ output$myMap <- renderLeaflet({
   #create leaflet map
   Hospitals %>% leaflet() %>%
     addTiles() %>%
-    addAwesomeMarkers(lat = ~LATITUDE, lng = ~LONGITUDE,  label = ~NAME, icon = icons, popup = paste("Status:", Hospitals$status, "<br>",
-                                                                                                     "Beds Available:", Hospitals$BEDS))
+    addAwesomeMarkers(lat = ~LATITUDE, lng = ~LONGITUDE,  label = ~NAME, icon = icons, popup = paste("Ventilators Available:", Hospitals$ventilators, "<br>",
+                                                                                                     "Beds Available:", Hospitals$BEDS, "<br>",
+                                                                                                     "Negative Rooms:", Hospitals$negative_rooms, "<br>",
+                                                                                                     "Shortages:", Hospitals$shortages, "<br>"))
 })
 
 ###Generate output table###
 output$table <- renderDataTable({
   Hospitals <- hospital_data()
   #select relevant columns to display
-  Hospitals <- Hospitals %>% select(NAME:ZIP,BEDS, status)
+  Hospitals <- Hospitals %>% select(NAME:ZIP,ventilators, status, entry_date)
   
   datatable(Hospitals,
             options = list(lengthMenu = c(25,50,100,200)),
