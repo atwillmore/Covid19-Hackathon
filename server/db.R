@@ -7,7 +7,8 @@ db <- reactive({
                   password = loginTxt[2], 
                   dbname="hospital_db", 
                   host="hospitaldb2.cbchdqimrdp1.us-east-2.rds.amazonaws.com")
-  hosp_info <- dbSendQuery(hdb, "select * from hospitals_19oct7")
+  #hosp_info <- dbSendQuery(hdb, "select * from hospitals_19oct7")
+  hosp_info <- dbSendQuery(hdb, "select * from Hospitals_April")
   Hospital_List <-fetch(hosp_info, n=-1)
   dbClearResult(hosp_info)
   dbDisconnect(hdb)
@@ -21,8 +22,8 @@ output$hospital <- renderPrint({
 
   if(input$ID %in% Hospitals$ID){
     Hospitals <- Hospitals %>% filter(ID == input$ID) %>%
-      select(NAME,ZIP,BEDS,ventilators, negative_rooms, shortages, entry_date)
-    print(as.data.frame(Hospitals))
+      select(NAME,ZIP,BEDS,ventilators, negative_rooms, shortages, capacity, entry_date)
+    print(Hospitals)
   }
   else{
     print("No hospital found with that ID")
@@ -41,17 +42,19 @@ x <- eventReactive(input$submit, {
                   host="hospitaldb2.cbchdqimrdp1.us-east-2.rds.amazonaws.com")
    
    
-   sql <- "UPDATE hospitals_19oct7 SET ventilators = ?vent, 
+   sql <- "UPDATE Hospitals_April SET ventilators = ?vent, 
    BEDS = ?beds,
    negative_rooms = ?neg,
    shortages = ?short,
-   entry_date = ?date
+   entry_date = ?date,
+   capacity = ?status
    WHERE id = ?ID;"
    query <- sqlInterpolate(hdb, sql, vent = input$Ventilators,
                            beds = input$Beds,
                            neg = input$Neg_room,
                            short = input$Shortages,
                            date = input$date,
+                           status = input$Status,
                            ID = input$ID)
    dbGetQuery(hdb, query)
    
@@ -66,8 +69,3 @@ output$success <- renderPrint({
   print("Upload Successful")
   
 })
-
-
-
-
-

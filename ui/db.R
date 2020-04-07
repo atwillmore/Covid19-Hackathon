@@ -5,7 +5,7 @@ tabItem(tabName = "db",
               solidHeader = TRUE,
               collapsible = TRUE,
               status = "primary",
-              width = 4,
+              width = 3,
               numericInput("ID", label = "Enter Hospital ID", value = 50694122),
               
               tags$hr(),
@@ -30,7 +30,7 @@ tabItem(tabName = "db",
                 solidHeader = TRUE,
                 collapsible = TRUE,
                 status = "primary",
-                width = 8,
+                width = 9,
                 verbatimTextOutput("hospital"),
                 verbatimTextOutput("success"))
             

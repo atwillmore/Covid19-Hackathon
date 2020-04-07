@@ -10,23 +10,20 @@ hospital_data <- reactive({
                   password = loginTxt[2], 
                   dbname="hospital_db", 
                   host="hospitaldb2.cbchdqimrdp1.us-east-2.rds.amazonaws.com")
-  hosp_info <- dbSendQuery(hdb, "select * from hospitals_19oct7")
+  hosp_info <- dbSendQuery(hdb, "select * from Hospitals_April")
   Hospital_List <-fetch(hosp_info, n=-1)
   
-  #Filter for open and > 200 BEDS
-  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", 
+  #Filter for open and > 0 BEDS
+  Hospital_List <- Hospital_List %>% filter(STATUS == "OPEN", BEDS > 0,
                                               TYPE == "GENERAL ACUTE CARE" |
                                               TYPE == "CHILDREN")
   
-  #Dummy assignment of status
-  Hospital_List$status <- rep(c("max capacity", "nearing capacity", "open resources"), len = 4346)
-  
   #Assign colors for markers
   for(row in 1:nrow(Hospital_List)){
-    if(Hospital_List[row, "status"] == "max capacity"){
+    if(Hospital_List[row, "capacity"] == "max capacity"){
       Hospital_List[row, "marker"] = "red"
     }
-    else if (Hospital_List[row, "status"] == "nearing capacity"){
+    else if (Hospital_List[row, "capacity"] == "nearing capacity"){
       Hospital_List[row, "marker"] = "orange"
     }
     else{
@@ -36,15 +33,15 @@ hospital_data <- reactive({
   
   #Check for input of filters on available capacity
   if(1 %in% input$capacity == FALSE){
-    Hospital_List <- Hospital_List %>% filter(status != "max capacity")
+    Hospital_List <- Hospital_List %>% filter(capacity != "max capacity")
   }
   
   if(2 %in% input$capacity == FALSE){
-    Hospital_List <- Hospital_List %>% filter(status != "nearing capacity")
+    Hospital_List <- Hospital_List %>% filter(capacity != "nearing capacity")
   }
   
   if(3 %in% input$capacity == FALSE){
-    Hospital_List <- Hospital_List %>% filter(status != "open resources")
+    Hospital_List <- Hospital_List %>% filter(capacity != "open resources")
   }
   
   #Assign icon for children's hospital vs general
@@ -87,7 +84,7 @@ output$myMap <- renderLeaflet({
 output$table <- renderDataTable({
   Hospitals <- hospital_data()
   #select relevant columns to display
-  Hospitals <- Hospitals %>% select(NAME:ZIP,ventilators, status, entry_date)
+  Hospitals <- Hospitals %>% select(NAME:ZIP,ventilators, capacity, entry_date)
   
   datatable(Hospitals,
             options = list(lengthMenu = c(25,50,100,200)),
